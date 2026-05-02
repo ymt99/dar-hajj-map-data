@@ -23,7 +23,7 @@ mkdir -p "$BUILD_DIR"
 BOUNDS="39.55,21.27,40.05,24.55"
 
 # --- planetiler.jar ---------------------------------------------------
-PLANETILER_VERSION="0.9.0"
+PLANETILER_VERSION="0.10.2"
 PLANETILER_JAR="$BUILD_DIR/planetiler.jar"
 PLANETILER_URL="https://github.com/onthegomap/planetiler/releases/download/v$PLANETILER_VERSION/planetiler.jar"
 

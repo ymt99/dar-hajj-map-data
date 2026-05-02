@@ -26,7 +26,7 @@ New-Item -ItemType Directory -Force -Path $BuildDir | Out-Null
 $Bounds = "39.55,21.27,40.05,24.55"
 
 # --- planetiler.jar ----------------------------------------------------
-$PlanetilerVersion = "0.9.0"
+$PlanetilerVersion = "0.10.2"
 $PlanetilerJar = Join-Path $BuildDir "planetiler.jar"
 $PlanetilerUrl = "https://github.com/onthegomap/planetiler/releases/download/v$PlanetilerVersion/planetiler.jar"
 
