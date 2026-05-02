@@ -1,0 +1,5 @@
+build/
+*.pmtiles
+*.osm.pbf
+planetiler.jar
+.DS_Store
