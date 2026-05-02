@@ -1,5 +1,14 @@
 build/
+data/
 *.pmtiles
 *.osm.pbf
+*.shp.zip
+*.sqlite.zip
+*.tsv.gz
 planetiler.jar
 .DS_Store
+
+# Local debug artifacts
+asia.html
+page.html
+*.html

@@ -49,8 +49,21 @@ fi
 # Maxzoom: 16, deep enough to see individual tents/buildings.
 echo ">>> Running planetiler — this takes 5–15 min ..."
 
+# Saudi Arabia lives inside Geofabrik's "GCC States" bundle.
+# Their -latest symlinks bot-block some HTTP clients, so we
+# pre-download via curl and pass --osm-path here.
+OSM_PATH="$ROOT/data/sources/gcc-states.osm.pbf"
+if [[ ! -f "$OSM_PATH" ]]; then
+  echo ">>> Downloading GCC States OSM extract (~250 MB) via curl ..."
+  mkdir -p "$(dirname "$OSM_PATH")"
+  curl -fL --retry 3 \
+    -A "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36" \
+    -o "$OSM_PATH" \
+    "https://download.geofabrik.de/asia/gcc-states-latest.osm.pbf"
+fi
+
 java -Xmx6g -jar "$PLANETILER_JAR" \
-  --area=saudi-arabia \
+  --osm-path="$OSM_PATH" \
   --bounds="$BOUNDS" \
   --download \
   --download-threads=4 \

@@ -60,8 +60,30 @@ if (Test-Path $OutputPmtiles) {
 #          extract. Adjust -Xmx below if your machine has less.
 Write-Host ">>> Running planetiler — this takes 5–15 min ..."
 
-java "-Xmx6g" -jar $PlanetilerJar `
-    --area=saudi-arabia `
+# Saudi Arabia lives inside Geofabrik's "GCC States" bundle along
+# with the rest of the Gulf — bigger than we need but covers all
+# five Hajj sites cleanly. Their `-latest` symlinks bot-block
+# Java's HTTP client, so we pre-download via curl into the local
+# data\sources directory and pass --osm-path here. The other
+# three sources (lake_centerlines, water_polygons, natural_earth)
+# can still be auto-fetched by planetiler — those servers are
+# friendlier.
+$OsmPath = Join-Path $Root "data\sources\gcc-states.osm.pbf"
+if (-not (Test-Path $OsmPath)) {
+    Write-Host ">>> Downloading GCC States OSM extract (~250 MB) via curl ..."
+    New-Item -ItemType Directory -Force -Path (Split-Path $OsmPath) | Out-Null
+    & curl.exe -L --ssl-revoke-best-effort `
+        -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36" `
+        --retry 3 `
+        -o $OsmPath `
+        "https://download.geofabrik.de/asia/gcc-states-latest.osm.pbf"
+}
+
+java "-Xmx6g" `
+    "-Djavax.net.ssl.trustStoreType=WINDOWS-ROOT" `
+    "-Djavax.net.ssl.trustStore=NONE" `
+    -jar $PlanetilerJar `
+    --osm-path=$OsmPath `
     --bounds=$Bounds `
     --download `
     --download-threads=4 `
